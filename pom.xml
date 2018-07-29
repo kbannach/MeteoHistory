@@ -8,16 +8,16 @@
     <artifactId>MeteoHistory</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-    </properties>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.3.RELEASE</version>
     </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -36,6 +36,21 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--<configuration>-->
+                    <!--<mainClass>MeteoHistoryApplication</mainClass>-->
+                <!--</configuration>-->
+            </plugin>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>2.0.3</version>
+                <configuration>
+                    <appName>meteo-history</appName>
+                    <!-- Heroku app startup command -->
+                    <processTypes>
+                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* configuration.MeteoHistoryApplication</web>
+                    </processTypes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

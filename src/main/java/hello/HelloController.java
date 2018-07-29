@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     public static final String BASE_URL = "/service/hello";
-    public static final String HELLO_URL = "/hello";
 
-    @GetMapping(HELLO_URL)
+    @GetMapping
     public String hello() {
         return "Hello from MeteoHistoryApplication!";
     }
