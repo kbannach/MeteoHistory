@@ -2,19 +2,19 @@ package org.kbannach.data.scraper;
 
 import lombok.RequiredArgsConstructor;
 import org.kbannach.meteorogram.MeteorogramService;
-import org.kbannach.selenium.pages.MeteoForecastPage;
+import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MeteoDataScrapper {
 
-    private final MeteoForecastPage meteoForecastPage;
+    private final MeteoForecastReader meteoForecastReader;
     private final MeteorogramService meteorogramService;
 
     public void scrap() {
         City city = City.GDYNIA;
-        byte[] bytes = meteoForecastPage.readMeteogram(city);
+        byte[] bytes = meteoForecastReader.readMeteogram(city);
         meteorogramService.persist(bytes, city);
     }
 
