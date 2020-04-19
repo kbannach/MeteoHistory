@@ -19,5 +19,5 @@ public class MeteoDataScrapper {
     }
 
     // TODO job to collect meteorograms
-    // TODO controller to download image by date, city(?)
+    // TODO controller to run scraping manually
 }

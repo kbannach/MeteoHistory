@@ -1,19 +1,29 @@
 package org.kbannach.meteorogram;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/meteorogram")
+@RequestMapping(MeteogramsController.BASE_URL)
 public class MeteogramsController {
 
-    @GetMapping
-    public ResponseEntity<Meteorogram> get() {
-        // TODO get by date, city
-        return ResponseEntity.ok().build();
+    public static final String BASE_URL = "/api/meteorogram";
+    public static final String GET_METEOROGRAM_IMAGE_URL = "/image";
+
+    private final MeteorogramService meteorogramService;
+
+    // TODO endpoint download an array of images by a range of dates and a city (range of cities?)
+
+    @GetMapping(value = GET_METEOROGRAM_IMAGE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> getMeteorogramImage(@Valid @RequestBody GetMeteorogramImageRequest request) {
+        return ResponseEntity.ok(meteorogramService.getMeteorogramImage(request));
     }
 }
