@@ -1,6 +1,7 @@
 package org.kbannach.data.scraper;
 
 import lombok.RequiredArgsConstructor;
+import org.kbannach.city.CityName;
 import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,9 @@ public class MeteoDataScrapper {
     private final MeteorogramService meteorogramService;
 
     public void scrap() {
-        City city = City.GDYNIA;
-        byte[] bytes = meteoForecastReader.readMeteogram(city);
-        meteorogramService.persist(bytes, city);
+        CityName cityName = CityName.GDYNIA;
+        byte[] bytes = meteoForecastReader.readMeteogram(cityName);
+        meteorogramService.persist(bytes, cityName);
     }
 
     // TODO automate opening different cities(?) (cities list could be fetched from DB)

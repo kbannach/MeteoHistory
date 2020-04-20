@@ -2,6 +2,7 @@ package org.kbannach.data.scraper;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
+import org.kbannach.city.CityName;
 import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ class MeteoDataScrapperTest implements UnitTest {
         underTest.scrap();
 
         // then
-        verify(meteoForecastReader).readMeteogram(City.GDYNIA);
-        verify(meteorogramService).persist(bytes, City.GDYNIA);
+        verify(meteoForecastReader).readMeteogram(CityName.GDYNIA);
+        verify(meteorogramService).persist(bytes, CityName.GDYNIA);
     }
 }

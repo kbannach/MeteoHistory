@@ -1,7 +1,7 @@
 package org.kbannach.meteorogram;
 
 import lombok.RequiredArgsConstructor;
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class MeteorogramService {
     private final MeteorogramRepository meteorogramRepository;
 
     public byte[] getMeteorogramImage(GetMeteorogramImageRequest request) {
-        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(request.getDateTime(), request.getCity(), PageRequest.of(0, 1));
+        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(request.getDateTime(), request.getCityName(), PageRequest.of(0, 1));
         Meteorogram meteorogram = page.get()
                 .findAny()
                 .orElseThrow(EntityNotFoundException::new);
@@ -23,11 +23,11 @@ public class MeteorogramService {
         return meteorogram.getBytes();
     }
 
-    public Meteorogram persist(byte[] bytes, City city) {
+    public Meteorogram persist(byte[] bytes, CityName cityName) {
         return meteorogramRepository.save(
                 Meteorogram.builder()
                         .bytes(bytes)
-                        .city(city)
+                        .cityName(cityName)
                         .build()
         );
     }

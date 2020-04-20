@@ -1,6 +1,6 @@
 package org.kbannach.meteorogram;
 
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,8 +13,8 @@ public interface MeteorogramRepository extends JpaRepository<Meteorogram, Long> 
 
     @Query("select m " +
             "from Meteorogram m " +
-            "where m.city = :city " +
+            "where m.cityName = :cityName " +
             "and m.creationDateTime <= :creationDateTime " +
             "order by m.creationDateTime desc")
-    Page<Meteorogram> findBytesByCreationDateTimeAndCity(@Param("creationDateTime") LocalDateTime creationDateTime, @Param("city") City city, Pageable pageRequest);
+    Page<Meteorogram> findBytesByCreationDateTimeAndCity(@Param("creationDateTime") LocalDateTime creationDateTime, @Param("cityName") CityName cityName, Pageable pageRequest);
 }

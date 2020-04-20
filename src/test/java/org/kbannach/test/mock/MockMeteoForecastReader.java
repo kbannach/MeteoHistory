@@ -1,7 +1,7 @@
 package org.kbannach.test.mock;
 
 import lombok.Setter;
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class MockMeteoForecastReader implements MeteoForecastReader {
     private byte[] bytesRead = new byte[0];
 
     @Override
-    public byte[] readMeteogram(City city) {
+    public byte[] readMeteogram(CityName cityName) {
         return bytesRead;
     }
 }

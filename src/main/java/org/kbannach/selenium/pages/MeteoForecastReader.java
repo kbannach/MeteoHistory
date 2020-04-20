@@ -1,8 +1,8 @@
 package org.kbannach.selenium.pages;
 
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 
 public interface MeteoForecastReader {
 
-    byte[] readMeteogram(City city);
+    byte[] readMeteogram(CityName cityName);
 }

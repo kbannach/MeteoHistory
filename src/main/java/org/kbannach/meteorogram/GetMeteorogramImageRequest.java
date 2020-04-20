@@ -2,7 +2,7 @@ package org.kbannach.meteorogram;
 
 import lombok.Builder;
 import lombok.Value;
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 
 import java.time.LocalDateTime;
 
@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 public class GetMeteorogramImageRequest {
 
     LocalDateTime dateTime;
-    City city;
+    CityName cityName;
 }

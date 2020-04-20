@@ -2,6 +2,7 @@ package org.kbannach.data.scraper;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.IntegrationTest;
+import org.kbannach.city.CityName;
 import org.kbannach.meteorogram.Meteorogram;
 import org.kbannach.test.mock.MockMeteoForecastReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,6 @@ class MeteoDataScrapperIT extends IntegrationTest {
         assertThat(meteorograms)
                 .hasSize(1)
                 .allMatch(m -> Arrays.equals(m.getBytes(), bytesRead))
-                .allMatch(m -> m.getCity() == City.GDYNIA);
+                .allMatch(m -> m.getCityName() == CityName.GDYNIA);
     }
 }
