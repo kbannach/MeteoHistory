@@ -16,7 +16,6 @@ public class MeteoForecastPage implements MeteoForecastReader {
     private final WebDriverFactory webDriverFactory;
     private final ImageReader imageReader;
 
-    // TODO automate opening different cities(?) (cities list could be fetched from DB)
     public byte[] readMeteogram(City city) {
         WebDriver driver = webDriverFactory.get();
         try {

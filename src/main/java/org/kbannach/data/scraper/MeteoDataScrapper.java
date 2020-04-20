@@ -18,6 +18,7 @@ public class MeteoDataScrapper {
         meteorogramService.persist(bytes, city);
     }
 
-    // TODO job to collect meteorograms
+    // TODO automate opening different cities(?) (cities list could be fetched from DB)
+
     // TODO controller to run scraping manually
 }
