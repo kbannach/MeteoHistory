@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.CityName;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -39,5 +39,5 @@ public class Meteorogram {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private City city;
+    private CityName cityName;
 }

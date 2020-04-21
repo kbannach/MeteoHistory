@@ -24,7 +24,7 @@ class MeteogramsControllerIT extends IntegrationTest {
         Meteorogram meteorogram = meteorogramCreator.create(imageBytes);
 
         GetMeteorogramImageRequest request = GetMeteorogramImageRequest.builder()
-                .city(meteorogram.getCity())
+                .cityName(meteorogram.getCityName())
                 .dateTime(meteorogram.getCreationDateTime().plusMinutes(1))
                 .build();
 
