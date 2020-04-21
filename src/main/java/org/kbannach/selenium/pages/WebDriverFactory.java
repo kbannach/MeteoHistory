@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 class WebDriverFactory {
 
     WebDriver get() {
+        // TODO headless driver
         WebDriverManager.chromedriver().setup();
         return new ChromeDriver();
     }

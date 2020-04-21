@@ -5,6 +5,8 @@ import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 @RequiredArgsConstructor
 public class MeteoDataScrapper {
@@ -13,12 +15,12 @@ public class MeteoDataScrapper {
     private final MeteorogramService meteorogramService;
 
     public void scrap() {
-        City city = City.GDYNIA;
-        byte[] bytes = meteoForecastReader.readMeteogram(city);
-        meteorogramService.persist(bytes, city);
+        Arrays.stream(City.values())
+                .forEach(city -> {
+                    byte[] bytes = meteoForecastReader.readMeteogram(city);
+                    meteorogramService.persist(bytes, city);
+                });
     }
-
-    // TODO automate opening different cities(?) (cities list could be fetched from DB)
 
     // TODO controller to run scraping manually
 }

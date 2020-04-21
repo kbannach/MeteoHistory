@@ -6,8 +6,12 @@ import org.kbannach.meteorogram.Meteorogram;
 import org.kbannach.test.mock.MockMeteoForecastReader;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +26,12 @@ class MeteoDataScrapperIT extends IntegrationTest {
     @Test
     void givenMeteorogramBytes_whenScrap_thenPersistOneMeteorogramWithCityGdyniaAndGivenBytes() {
         // given
-        byte[] bytesRead = {1, 2, 3};
-        mockMeteorogramReader.setBytesRead(bytesRead);
+        City[] cities = City.values();
+        Map<City, byte[]> cityImageMap = IntStream.range(0, cities.length)
+                .mapToObj(i -> new SimpleEntry<>(cities[i], new byte[]{(byte) (1 + i), (byte) (2 + i), (byte) (3 + i)}))
+                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+
+        mockMeteorogramReader.setCityImageMap(cityImageMap);
 
         // when
         underTest.scrap();
@@ -34,8 +42,9 @@ class MeteoDataScrapperIT extends IntegrationTest {
         );
 
         assertThat(meteorograms)
-                .hasSize(1)
-                .allMatch(m -> Arrays.equals(m.getBytes(), bytesRead))
-                .allMatch(m -> m.getCity() == City.GDYNIA);
+                .hasSize(cities.length)
+                .allMatch(m -> Arrays.equals(m.getBytes(), cityImageMap.get(m.getCity())))
+                .extracting(Meteorogram::getCity)
+                .containsExactly(cities);
     }
 }
