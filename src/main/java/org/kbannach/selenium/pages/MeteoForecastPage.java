@@ -1,7 +1,7 @@
 package org.kbannach.selenium.pages;
 
 import lombok.RequiredArgsConstructor;
-import org.kbannach.city.CityName;
+import org.kbannach.city.City;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,10 +16,10 @@ public class MeteoForecastPage implements MeteoForecastReader {
     private final WebDriverFactory webDriverFactory;
     private final ImageReader imageReader;
 
-    public byte[] readMeteogram(CityName cityName) {
+    public byte[] readMeteogram(City city) {
         WebDriver driver = webDriverFactory.get();
         try {
-            return read(driver, cityName.getMeteorogramUrl());
+            return read(driver, city.getMeteorogramUrl());
         } finally {
             driver.quit();
         }

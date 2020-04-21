@@ -3,7 +3,7 @@ package org.kbannach.selenium.pages;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
-import org.kbannach.city.CityName;
+import org.kbannach.city.City;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +30,7 @@ class MeteoForecastPageTest implements UnitTest {
     @Test
     void givenWebDriver_whenReadMeteorogramByCity_thenReturnBytesReadByImageReader() {
         // given
-        CityName cityName = CityName.GDYNIA;
+        City city = City.GDYNIA;
 
         WebDriver driverMock = mock(WebDriver.class);
         when(webDriverFactory.get()).thenReturn(driverMock);
@@ -45,12 +45,12 @@ class MeteoForecastPageTest implements UnitTest {
         when(imageReader.readFromUrl(eq(url))).thenReturn(readBytes);
 
         // when
-        byte[] actualBytes = underTest.readMeteogram(cityName);
+        byte[] actualBytes = underTest.readMeteogram(city);
 
         // then
         assertEquals(readBytes, actualBytes);
 
-        verify(driverMock).get(cityName.getMeteorogramUrl());
+        verify(driverMock).get(city.getMeteorogramUrl());
         verify(imageReader).readFromUrl(url);
     }
 
@@ -64,7 +64,7 @@ class MeteoForecastPageTest implements UnitTest {
         when(driverMock.findElement(any())).thenReturn(webElementMock);
 
         // when
-        underTest.readMeteogram(CityName.GDYNIA);
+        underTest.readMeteogram(City.GDYNIA);
 
         // then
         verify(driverMock).quit();
@@ -79,7 +79,7 @@ class MeteoForecastPageTest implements UnitTest {
         when(driverMock.findElement(any())).thenThrow(new IllegalStateException());
 
         // when
-        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(CityName.GDYNIA);
+        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(City.GDYNIA);
 
         // then
         assertThatThrownBy(throwingCallable).isExactlyInstanceOf(IllegalStateException.class);
@@ -95,7 +95,7 @@ class MeteoForecastPageTest implements UnitTest {
         when(driverMock.findElement(any())).thenReturn(null);
 
         // when
-        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(CityName.GDYNIA);
+        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(City.GDYNIA);
 
         // then
         assertThatThrownBy(throwingCallable).isExactlyInstanceOf(NullPointerException.class);

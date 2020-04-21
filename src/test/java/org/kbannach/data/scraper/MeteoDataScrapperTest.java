@@ -2,6 +2,7 @@ package org.kbannach.data.scraper;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
+import org.kbannach.city.City;
 import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.mockito.ArgumentCaptor;

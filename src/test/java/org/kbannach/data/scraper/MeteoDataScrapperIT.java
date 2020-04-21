@@ -2,6 +2,7 @@ package org.kbannach.data.scraper;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.IntegrationTest;
+import org.kbannach.city.City;
 import org.kbannach.meteorogram.Meteorogram;
 import org.kbannach.test.mock.MockMeteoForecastReader;
 import org.springframework.beans.factory.annotation.Autowired;

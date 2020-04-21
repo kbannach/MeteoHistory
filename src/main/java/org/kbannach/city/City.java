@@ -1,4 +1,4 @@
-package org.kbannach.data.scraper;
+package org.kbannach.city;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

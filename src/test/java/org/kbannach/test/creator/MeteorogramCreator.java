@@ -1,7 +1,7 @@
 package org.kbannach.test.creator;
 
 import lombok.RequiredArgsConstructor;
-import org.kbannach.city.CityName;
+import org.kbannach.city.City;
 import org.kbannach.meteorogram.Meteorogram;
 import org.kbannach.meteorogram.MeteorogramRepository;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class MeteorogramCreator {
     public Meteorogram create(byte[] imageBytes) {
         return meteorogramRepository.save(
                 Meteorogram.builder()
-                        .cityName(CityName.GDYNIA)
+                        .city(City.GDYNIA)
                         .bytes(imageBytes)
                         .build()
         );

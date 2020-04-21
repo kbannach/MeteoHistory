@@ -1,7 +1,7 @@
 package org.kbannach.test.mock;
 
 import lombok.Setter;
-import org.kbannach.data.scraper.City;
+import org.kbannach.city.City;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

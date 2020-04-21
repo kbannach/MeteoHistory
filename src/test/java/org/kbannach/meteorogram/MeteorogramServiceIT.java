@@ -2,7 +2,7 @@ package org.kbannach.meteorogram;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.IntegrationTest;
-import org.kbannach.city.CityName;
+import org.kbannach.city.City;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -23,16 +23,16 @@ class MeteorogramServiceIT extends IntegrationTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         byte[] bytes = {1, 2, 3};
-        CityName cityName = CityName.GDYNIA;
+        City city = City.GDYNIA;
 
         // when
-        Meteorogram persisted = underTest.persist(bytes, cityName);
+        Meteorogram persisted = underTest.persist(bytes, city);
 
         // then
         Meteorogram actualPersisted = findById(Meteorogram.class, persisted.getId());
 
         assertArrayEquals(bytes, actualPersisted.getBytes());
-        assertEquals(cityName, actualPersisted.getCityName());
+        assertEquals(city, actualPersisted.getCity());
         assertThat(actualPersisted.getCreationDateTime()).isCloseTo(now, within(1, ChronoUnit.SECONDS));
     }
 }

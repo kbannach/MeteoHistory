@@ -1,6 +1,7 @@
 package org.kbannach.data.scraper;
 
 import lombok.RequiredArgsConstructor;
+import org.kbannach.city.City;
 import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.stereotype.Component;

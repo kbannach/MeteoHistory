@@ -2,7 +2,7 @@ package org.kbannach.meteorogram;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
-import org.kbannach.city.CityName;
+import org.kbannach.city.City;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ class MeteorogramServiceTest implements UnitTest {
     void givenBytesAndCity_whenPersist_thenCallRepositoryWithProperArguments() {
         // given
         byte[] bytes = new byte[]{1, 2, 3};
-        CityName cityName = CityName.GDYNIA;
+        City cityName = City.GDYNIA;
 
         // when
         underTest.persist(bytes, cityName);
@@ -36,6 +36,6 @@ class MeteorogramServiceTest implements UnitTest {
 
         Meteorogram actual = meteorogramCaptor.getValue();
         assertEquals(bytes, actual.getBytes());
-        assertEquals(cityName, actual.getCityName());
+        assertEquals(cityName, actual.getCity());
     }
 }
