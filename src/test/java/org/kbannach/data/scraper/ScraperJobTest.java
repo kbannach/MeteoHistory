@@ -7,13 +7,13 @@ import org.mockito.Mock;
 
 import static org.mockito.Mockito.verify;
 
-class ScrapperJobTest implements UnitTest {
+class ScraperJobTest implements UnitTest {
 
     @InjectMocks
-    private ScrapperJob underTest;
+    private ScraperJob underTest;
 
     @Mock
-    private MeteoDataScrapper meteoDataScrapper;
+    private MeteoDataScraper meteoDataScraper;
 
     @Test
     void whenRunScrapping_thenInvokeScrapMethod() {
@@ -21,6 +21,6 @@ class ScrapperJobTest implements UnitTest {
         underTest.runScrapping();
 
         // then
-        verify(meteoDataScrapper).scrap();
+        verify(meteoDataScraper).scrap();
     }
 }

@@ -16,10 +16,10 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MeteoDataScrapperIT extends IntegrationTest {
+class MeteoDataScraperIT extends IntegrationTest {
 
     @Autowired
-    private MeteoDataScrapper underTest;
+    private MeteoDataScraper underTest;
 
     @Autowired
     private MockMeteoForecastReader mockMeteorogramReader;

@@ -20,10 +20,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class MeteoDataScrapperTest implements UnitTest {
+class MeteoDataScraperTest implements UnitTest {
 
     @InjectMocks
-    private MeteoDataScrapper underTest;
+    private MeteoDataScraper underTest;
 
     @Mock
     private MeteoForecastReader meteoForecastReader;

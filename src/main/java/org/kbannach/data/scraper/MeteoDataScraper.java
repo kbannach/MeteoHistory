@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
-public class MeteoDataScrapper {
+public class MeteoDataScraper {
 
     private final MeteoForecastReader meteoForecastReader;
     private final MeteorogramService meteorogramService;

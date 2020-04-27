@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ScrapperJob {
+public class ScraperJob {
 
-    private final MeteoDataScrapper meteoDataScrapper;
+    private final MeteoDataScraper meteoDataScraper;
 
     @Scheduled(cron = "${app.scrapping-cron}")
     public void runScrapping() {
         log.info("running scheduled scrapping...");
-        meteoDataScrapper.scrap();
+        meteoDataScraper.scrap();
         log.info("scrapping complete");
     }
 }
