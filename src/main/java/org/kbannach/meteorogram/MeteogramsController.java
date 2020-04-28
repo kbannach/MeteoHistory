@@ -21,6 +21,7 @@ public class MeteogramsController {
     private final MeteorogramService meteorogramService;
 
     // TODO endpoint download an array of images by a range of dates and a city (range of cities?)
+    // TODO serve map-key.png as static content
 
     @GetMapping(value = GET_METEOROGRAM_IMAGE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> getMeteorogramImage(@Valid @RequestBody GetMeteorogramImageRequest request) {
