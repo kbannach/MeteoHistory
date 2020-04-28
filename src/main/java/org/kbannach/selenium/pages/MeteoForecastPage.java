@@ -1,14 +1,18 @@
 package org.kbannach.selenium.pages;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.kbannach.city.City;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MeteoForecastPage implements MeteoForecastReader {
 
     private static final String METEOROGRAM_IMG_ELEMENT_ID = "meteorogram";
@@ -16,10 +20,13 @@ public class MeteoForecastPage implements MeteoForecastReader {
     private final WebDriverFactory webDriverFactory;
     private final ImageReader imageReader;
 
-    public byte[] readMeteogram(City city) {
+    public Optional<byte[]> readMeteogram(City city) {
         WebDriver driver = webDriverFactory.get();
         try {
-            return read(driver, city.getMeteorogramUrl());
+            return Optional.ofNullable(read(driver, city.getMeteorogramUrl()));
+        } catch (Exception e) {
+            log.info("exception during meteorogram image reading", e);
+            return Optional.empty();
         } finally {
             driver.quit();
         }

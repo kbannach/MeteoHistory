@@ -17,9 +17,9 @@ public class MeteoDataScraper {
 
     public void scrap() {
         Arrays.stream(City.values())
-                .forEach(city -> {
-                    byte[] bytes = meteoForecastReader.readMeteogram(city);
-                    meteorogramService.persist(bytes, city);
-                });
+                .forEach(city ->
+                        meteoForecastReader.readMeteogram(city)
+                                .ifPresent(bytes -> meteorogramService.persist(bytes, city))
+                );
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @Primary
@@ -20,10 +21,10 @@ public class MockMeteoForecastReader implements MeteoForecastReader {
     private Map<City, byte[]> cityImageMap;
 
     @Override
-    public byte[] readMeteogram(City city) {
-        return Objects.requireNonNullElseGet(
-                bytesRead,
-                () -> Objects.requireNonNull(cityImageMap.get(city))
+    public Optional<byte[]> readMeteogram(City city) {
+        return Optional.of(
+                Optional.ofNullable(bytesRead)
+                        .orElseGet(() -> Objects.requireNonNull(cityImageMap.get(city)))
         );
     }
 }

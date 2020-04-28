@@ -1,6 +1,5 @@
 package org.kbannach.selenium.pages;
 
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
 import org.kbannach.city.City;
@@ -9,7 +8,9 @@ import org.mockito.Mock;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,10 +46,10 @@ class MeteoForecastPageTest implements UnitTest {
         when(imageReader.readFromUrl(eq(url))).thenReturn(readBytes);
 
         // when
-        byte[] actualBytes = underTest.readMeteogram(city);
+        Optional<byte[]> actualBytes = underTest.readMeteogram(city);
 
         // then
-        assertEquals(readBytes, actualBytes);
+        assertEquals(readBytes, actualBytes.orElseThrow());
 
         verify(driverMock).get(city.getMeteorogramUrl());
         verify(imageReader).readFromUrl(url);
@@ -71,7 +72,7 @@ class MeteoForecastPageTest implements UnitTest {
     }
 
     @Test
-    void givenFailingWebDriver_whenReadMeteorogramByCity_thenQuitDriver() {
+    void givenFailingWebDriver_whenReadMeteorogramByCity_thenReturnNullAndQuitDriver() {
         // given
         WebDriver driverMock = mock(WebDriver.class);
         when(webDriverFactory.get()).thenReturn(driverMock);
@@ -79,15 +80,15 @@ class MeteoForecastPageTest implements UnitTest {
         when(driverMock.findElement(any())).thenThrow(new IllegalStateException());
 
         // when
-        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(City.GDYNIA);
+        Optional<byte[]> result = underTest.readMeteogram(City.GDYNIA);
 
         // then
-        assertThatThrownBy(throwingCallable).isExactlyInstanceOf(IllegalStateException.class);
+        assertThat(result).isEmpty();
         verify(driverMock).quit();
     }
 
     @Test
-    void givenWebElementNotFound_whenReadMeteorogramByCity_thenThrowNullPointerExceptionAndQuitDriver() {
+    void givenWebElementNotFound_whenReadMeteorogramByCity_thenReturnNullAndQuitDriver() {
         // given
         WebDriver driverMock = mock(WebDriver.class);
         when(webDriverFactory.get()).thenReturn(driverMock);
@@ -95,10 +96,10 @@ class MeteoForecastPageTest implements UnitTest {
         when(driverMock.findElement(any())).thenReturn(null);
 
         // when
-        ThrowingCallable throwingCallable = () -> underTest.readMeteogram(City.GDYNIA);
+        Optional<byte[]> result = underTest.readMeteogram(City.GDYNIA);
 
         // then
-        assertThatThrownBy(throwingCallable).isExactlyInstanceOf(NullPointerException.class);
+        assertThat(result).isEmpty();
         verify(driverMock).quit();
     }
 }

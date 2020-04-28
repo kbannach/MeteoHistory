@@ -11,7 +11,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 class ImageReader {
 
-    @SneakyThrows // TODO throw dedicated exception
+    @SneakyThrows
     public byte[] readFromUrl(String url) {
         return StreamUtils.copyToByteArray(new URL(url).openStream());
     }

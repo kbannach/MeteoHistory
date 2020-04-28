@@ -11,6 +11,7 @@ import org.mockito.Mock;
 
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 class MeteoDataScraperTest implements UnitTest {
@@ -34,6 +36,7 @@ class MeteoDataScraperTest implements UnitTest {
     void whenScrap_thenReadAndPersistMeteorogramForEveryCity() {
         // given
         int citiesCount = City.values().length;
+        when(meteoForecastReader.readMeteogram(any())).thenReturn(Optional.of(new byte[]{}));
 
         // when
         underTest.scrap();
@@ -58,12 +61,24 @@ class MeteoDataScraperTest implements UnitTest {
                 .mapToObj(i -> new AbstractMap.SimpleEntry<>(cities[i], new byte[]{(byte) (1 + i), (byte) (2 + i), (byte) (3 + i)}))
                 .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
-        cityImageMap.forEach((city, bytes) -> when(meteoForecastReader.readMeteogram(city)).thenReturn(bytes));
+        cityImageMap.forEach((city, bytes) -> when(meteoForecastReader.readMeteogram(city)).thenReturn(Optional.ofNullable(bytes)));
 
         // when
         underTest.scrap();
 
         // then
         cityImageMap.forEach(((city, bytes) -> verify(meteorogramService).persist(bytes, city)));
+    }
+
+    @Test
+    void givenNoImagesFound_whenScrap_thenDoNotCreateAnyMeteorogram() {
+        // given
+        when(meteoForecastReader.readMeteogram(any())).thenReturn(Optional.empty());
+
+        // when
+        underTest.scrap();
+
+        // then
+        verifyNoInteractions(meteorogramService);
     }
 }
