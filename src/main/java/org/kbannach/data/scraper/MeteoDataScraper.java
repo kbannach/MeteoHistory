@@ -22,6 +22,4 @@ public class MeteoDataScraper {
                     meteorogramService.persist(bytes, city);
                 });
     }
-
-    // TODO controller to run scraping manually
 }

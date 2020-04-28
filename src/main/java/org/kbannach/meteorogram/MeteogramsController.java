@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping(MeteogramsController.BASE_URL)
 public class MeteogramsController {
 
