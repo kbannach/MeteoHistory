@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 import org.kbannach.city.City;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Value
@@ -11,5 +12,7 @@ import java.time.LocalDateTime;
 public class GetMeteorogramImageRequest {
 
     LocalDateTime dateTime;
+
+    @NotNull
     City city;
 }

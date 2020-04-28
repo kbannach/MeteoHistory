@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +17,9 @@ public class MeteorogramService {
     private final MeteorogramRepository meteorogramRepository;
 
     public byte[] getMeteorogramImage(GetMeteorogramImageRequest request) {
-        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(request.getDateTime(), request.getCity(), PageRequest.of(0, 1));
+        LocalDateTime toDate = Objects.requireNonNullElse(request.getDateTime(), LocalDateTime.now());
+
+        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(toDate, request.getCity(), PageRequest.of(0, 1));
         Meteorogram meteorogram = page.get()
                 .findAny()
                 .orElseThrow(EntityNotFoundException::new);
