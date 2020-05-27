@@ -28,6 +28,7 @@ public class MeteoForecastPage implements MeteoForecastReader {
             log.info("exception during meteorogram image reading", e);
             return Optional.empty();
         } finally {
+            // TODO kbannach quit after every city finishes
             driver.quit();
         }
     }

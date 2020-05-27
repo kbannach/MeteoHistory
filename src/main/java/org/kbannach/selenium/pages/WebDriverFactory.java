@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Component;
 class WebDriverFactory {
 
     WebDriver get() {
-        // TODO headless driver
         WebDriverManager.chromedriver().setup();
-        return new ChromeDriver();
+
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+
+        return new ChromeDriver(options);
     }
 }
