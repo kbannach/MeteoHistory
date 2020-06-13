@@ -22,7 +22,7 @@ public class MeteogramsController {
 
     // TODO endpoint download an array of images by a range of dates and a city (range of cities?)
 
-    @GetMapping(value = GET_METEOROGRAM_IMAGE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = GET_METEOROGRAM_IMAGE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE /*TODO maybe change to image*/)
     public ResponseEntity<byte[]> getMeteorogramImage(@Valid @RequestBody GetMeteorogramImageRequest request) {
         return ResponseEntity.ok(meteorogramService.getMeteorogramImage(request));
     }

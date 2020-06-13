@@ -2,12 +2,15 @@ package org.kbannach.meteorogram;
 
 import org.junit.jupiter.api.Test;
 import org.kbannach.IntegrationTest;
+import org.kbannach.city.City;
+import org.kbannach.config.ErrorType;
 import org.kbannach.test.creator.MeteorogramCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MeteogramsControllerIT extends IntegrationTest {
@@ -32,8 +35,28 @@ class MeteogramsControllerIT extends IntegrationTest {
         ResultActions resultActions = mockMvc.perform(mockMvcHelper.getWithBody(url, request));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
                 .andExpect(content().bytes(imageBytes));
+    }
+
+    @Test
+    void givenNoMeteorogramFound_whenGetMeteorogramImage_thenBadRequest() throws Exception {
+        // given
+        String url = MeteogramsController.BASE_URL + MeteogramsController.GET_METEOROGRAM_IMAGE_URL;
+
+        GetMeteorogramImageRequest request = GetMeteorogramImageRequest.builder()
+                .city(City.GDYNIA)
+                .build();
+
+        // when
+        ResultActions resultActions = mockMvc.perform(mockMvcHelper.getWithBody(url, request));
+
+        // then
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorType").value(ErrorType.ENTITY_NOT_FOUND.toString()))
+                .andExpect(jsonPath("$.message").value("No entity found."));
     }
 }
