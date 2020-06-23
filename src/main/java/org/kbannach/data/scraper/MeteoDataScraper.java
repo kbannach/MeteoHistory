@@ -6,7 +6,7 @@ import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -16,10 +16,7 @@ public class MeteoDataScraper {
     private final MeteorogramService meteorogramService;
 
     public void scrap() {
-        Arrays.stream(City.values())
-                .forEach(city ->
-                        meteoForecastReader.readMeteogram(city)
-                                .ifPresent(bytes -> meteorogramService.persist(bytes, city))
-                );
+        meteoForecastReader.readAllMeteograms(Set.of(City.values()))
+                .forEach(((city, bytes) -> meteorogramService.persist(bytes, city)));
     }
 }

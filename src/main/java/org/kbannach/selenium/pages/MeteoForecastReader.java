@@ -2,9 +2,10 @@ package org.kbannach.selenium.pages;
 
 import org.kbannach.city.City;
 
-import java.util.Optional;
+import java.util.Collection;
+import java.util.Map;
 
 public interface MeteoForecastReader {
 
-    Optional<byte[]> readMeteogram(City cityName);
+    Map<City, byte[]> readAllMeteograms(Collection<City> cities);
 }

@@ -46,6 +46,6 @@ class MeteoDataScraperIT extends IntegrationTest {
                 .hasSize(cities.length)
                 .allMatch(m -> Arrays.equals(m.getBytes(), cityImageMap.get(m.getCity())))
                 .extracting(Meteorogram::getCity)
-                .containsExactly(cities);
+                .containsExactlyInAnyOrder(cities);
     }
 }

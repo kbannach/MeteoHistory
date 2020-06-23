@@ -5,22 +5,12 @@ import org.kbannach.UnitTest;
 import org.kbannach.city.City;
 import org.kbannach.meteorogram.MeteorogramService;
 import org.kbannach.selenium.pages.MeteoForecastReader;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 
 class MeteoDataScraperTest implements UnitTest {
 
@@ -30,55 +20,18 @@ class MeteoDataScraperTest implements UnitTest {
     @Mock
     private MeteoForecastReader meteoForecastReader;
     @Mock
+    @SuppressWarnings("unused")
     private MeteorogramService meteorogramService;
 
     @Test
-    void whenScrap_thenReadAndPersistMeteorogramForEveryCity() {
+    void whenScrap_thenReadMeteorogramForEveryCity() {
         // given
-        int citiesCount = City.values().length;
-        when(meteoForecastReader.readMeteogram(any())).thenReturn(Optional.of(new byte[]{}));
+        Set<City> cities = Set.of(City.values());
 
         // when
         underTest.scrap();
 
         // then
-        ArgumentCaptor<City> cityCaptor = ArgumentCaptor.forClass(City.class);
-        verify(meteoForecastReader, times(citiesCount)).readMeteogram(cityCaptor.capture());
-        assertThat(cityCaptor.getAllValues())
-                .containsExactly(City.values());
-
-        cityCaptor = ArgumentCaptor.forClass(City.class);
-        verify(meteorogramService, times(citiesCount)).persist(any(), cityCaptor.capture());
-        assertThat(cityCaptor.getAllValues())
-                .containsExactly(City.values());
-    }
-
-    @Test
-    void givenBytesReadForEveryCity_whenScrap_thenPersistMeteorogramWithGivenBytesForEveryCity() {
-        // given
-        City[] cities = City.values();
-        Map<City, byte[]> cityImageMap = IntStream.range(0, cities.length)
-                .mapToObj(i -> new AbstractMap.SimpleEntry<>(cities[i], new byte[]{(byte) (1 + i), (byte) (2 + i), (byte) (3 + i)}))
-                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-
-        cityImageMap.forEach((city, bytes) -> when(meteoForecastReader.readMeteogram(city)).thenReturn(Optional.ofNullable(bytes)));
-
-        // when
-        underTest.scrap();
-
-        // then
-        cityImageMap.forEach(((city, bytes) -> verify(meteorogramService).persist(bytes, city)));
-    }
-
-    @Test
-    void givenNoImagesFound_whenScrap_thenDoNotCreateAnyMeteorogram() {
-        // given
-        when(meteoForecastReader.readMeteogram(any())).thenReturn(Optional.empty());
-
-        // when
-        underTest.scrap();
-
-        // then
-        verifyNoInteractions(meteorogramService);
+        verify(meteoForecastReader).readAllMeteograms(cities);
     }
 }
