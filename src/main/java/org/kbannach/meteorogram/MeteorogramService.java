@@ -2,6 +2,7 @@ package org.kbannach.meteorogram;
 
 import lombok.RequiredArgsConstructor;
 import org.kbannach.city.City;
+import org.kbannach.model.GetMeteorogramImageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class MeteorogramService {
     public byte[] getMeteorogramImage(GetMeteorogramImageRequest request) {
         LocalDateTime toDate = Objects.requireNonNullElse(request.getDateTime(), LocalDateTime.now());
 
-        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(toDate, request.getCity(), PageRequest.of(0, 1));
+        City city = City.findForCityEnum(request.getCity());
+        Page<Meteorogram> page = meteorogramRepository.findBytesByCreationDateTimeAndCity(toDate, city, PageRequest.of(0, 1));
         Meteorogram meteorogram = page.get()
                 .findAny()
                 .orElseThrow(EntityNotFoundException::new);

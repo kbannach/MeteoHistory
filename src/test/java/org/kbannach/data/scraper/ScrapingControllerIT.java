@@ -24,6 +24,10 @@ class ScrapingControllerIT extends IntegrationTest {
     @Test
     void givenImagesForCities_whenScrap_thenCreateMeteorogramForEachCity() throws Exception {
         // given
+        String url =
+//                "/api" + TODO to fix
+                "/scrap";
+
         byte[] gdyniaBytes = {1, 2, 3};
         byte[] gdanskBytes = {11, 22, 33};
         Map<City, byte[]> cityMap = Map.of(
@@ -33,7 +37,7 @@ class ScrapingControllerIT extends IntegrationTest {
         mockMeteoForecastReader.setCityImageMap(cityMap);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(ScrapingController.BASE_URL));
+        ResultActions resultActions = mockMvc.perform(post(url));
 
         // then
         resultActions.andExpect(status().isOk());

@@ -4,6 +4,8 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 import org.kbannach.UnitTest;
 import org.kbannach.city.City;
+import org.kbannach.model.GetMeteorogramImageRequest;
+import org.kbannach.model.GetMeteorogramImageRequest.CityEnum;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -58,14 +60,13 @@ class MeteorogramServiceTest implements UnitTest {
     @Test
     void givenMeteorogramNotFound_whenGetMeteorogramImage_thenThrowEntityNotFound() {
         // given
-        City city = City.GDYNIA;
+        CityEnum city = CityEnum.GDYNIA;
         LocalDateTime dateTime = LocalDateTime.now();
-        GetMeteorogramImageRequest request = GetMeteorogramImageRequest.builder()
+        GetMeteorogramImageRequest request = new GetMeteorogramImageRequest()
                 .city(city)
-                .dateTime(dateTime)
-                .build();
+                .dateTime(dateTime);
 
-        when(meteorogramRepository.findBytesByCreationDateTimeAndCity(eq(dateTime), eq(city), any())).thenReturn(Page.empty());
+        when(meteorogramRepository.findBytesByCreationDateTimeAndCity(eq(dateTime), eq(City.findForCityEnum(city)), any())).thenReturn(Page.empty());
 
         // when
         ThrowableAssert.ThrowingCallable throwingCallable = () -> underTest.getMeteorogramImage(request);
@@ -78,15 +79,14 @@ class MeteorogramServiceTest implements UnitTest {
     @Test
     void givenMeteorogramExists_whenGetMeteorogramImage_thenReturnBytes() {
         // given
-        City city = City.GDYNIA;
+        CityEnum city = CityEnum.GDYNIA;
         LocalDateTime dateTime = LocalDateTime.now();
-        GetMeteorogramImageRequest request = GetMeteorogramImageRequest.builder()
+        GetMeteorogramImageRequest request = new GetMeteorogramImageRequest()
                 .city(city)
-                .dateTime(dateTime)
-                .build();
+                .dateTime(dateTime);
 
         byte[] expectedBytes = {1, 2, 3};
-        when(meteorogramRepository.findBytesByCreationDateTimeAndCity(eq(dateTime), eq(city), any())).thenReturn(new PageImpl<>(
+        when(meteorogramRepository.findBytesByCreationDateTimeAndCity(eq(dateTime), eq(City.findForCityEnum(city)), any())).thenReturn(new PageImpl<>(
                 List.of(
                         Meteorogram.builder()
                                 .bytes(expectedBytes)
@@ -105,10 +105,9 @@ class MeteorogramServiceTest implements UnitTest {
     @Test
     void givenNoDateTimeSpecified_whenGetMeteorogramImage_thenFindMeteorogramWithNowDate() {
         // given
-        City city = City.GDYNIA;
-        GetMeteorogramImageRequest request = GetMeteorogramImageRequest.builder()
-                .city(city)
-                .build();
+        CityEnum city = CityEnum.GDYNIA;
+        GetMeteorogramImageRequest request = new GetMeteorogramImageRequest()
+                .city(city);
 
         when(meteorogramRepository.findBytesByCreationDateTimeAndCity(any(), any(), any())).thenReturn(new PageImpl<>(
                 List.of(Meteorogram.builder().build())
@@ -118,7 +117,7 @@ class MeteorogramServiceTest implements UnitTest {
         underTest.getMeteorogramImage(request);
 
         // then
-        verify(meteorogramRepository).findBytesByCreationDateTimeAndCity(creationDateTimeCaptor.capture(), eq(city), any());
+        verify(meteorogramRepository).findBytesByCreationDateTimeAndCity(creationDateTimeCaptor.capture(), eq(City.findForCityEnum(city)), any());
 
         assertThat(creationDateTimeCaptor.getValue())
                 .isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));

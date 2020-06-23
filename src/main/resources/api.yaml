@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: MeteoHistory API
+  description: TODO
+  version: 1.0.0
+servers:
+  #  - url: http://localhost:8081/api TODO base path not working
+  - url: http://localhost:8081
+    description: Local server
+#host: petstore.swagger.io
+#basePath: /v1
+#schemes:
+#  - http
+#consumes:
+#  - application/json
+#produces:
+#  - application/json
+paths:
+  /meteorogram/image:
+    get:
+      description: Returns a Meteorogram image bytes by city
+      operationId: getMeteorogramImage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMeteorogramImageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: When no Meteorogram found for given parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+  /scrap:
+    post:
+      description: Initiates Meteorograms scaping
+      operationId: scrap
+      responses:
+        '200':
+          description: Scraping completed succesfully
+
+components:
+  schemas:
+    GetMeteorogramImageRequest:
+      type: object
+      required:
+        - city
+      properties:
+        dateTime:
+          description: First Meteorogram found after given date will be returned
+          type: string
+          format: date-time
+          example: '2020-06-14T00:45:50.1974593'
+        city:
+          description: Which city's Meteorogram to find?
+          type: string
+          enum: [GDYNIA, GDANSK]
+    #    City: TODO how to specify that this is a GetMeteorogramImageRequest.city's type?
+    #      type: string
+    #      enum:
+    #        - GDYNIA
+    #        - GDANSK
+    ErrorType:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum: [ENTITY_NOT_FOUND]
+        message:
+          type: string

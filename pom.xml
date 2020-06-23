@@ -17,9 +17,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
+
         <selenium-java.version>3.141.59</selenium-java.version>
-        <webdrivermanager.version>3.8.1</webdrivermanager.version>
-        <heroku-maven-plugin.version>2.0.3</heroku-maven-plugin.version>
+        <webdrivermanager.version>4.0.0</webdrivermanager.version>
+        <openapi-generator-maven-plugin.version>4.3.1</openapi-generator-maven-plugin.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
     </properties>
 
     <dependencies>
@@ -36,6 +39,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!-- DATABASE DEPENDENCIES-->
@@ -54,6 +61,24 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.8.9</version>
+        </dependency>
+
+        <!-- SWAGGER DEPENDENCIES -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
         <!-- SELENIUM DEPENDENCIES -->
@@ -119,18 +144,33 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>${heroku-maven-plugin.version}</version>
-                <configuration>
-                    <appName>meteo-history</appName>
-                    <!-- Heroku app startup command -->
-                    <processTypes>
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/*
-                            org.kbannach.MeteoHistoryApplication
-                        </web>
-                    </processTypes>
-                </configuration>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>org.kbannach.api</apiPackage>
+                            <modelPackage>org.kbannach.model</modelPackage>
+                            <typeMappings>
+                                <typeMapping>OffsetDateTime=java.time.LocalDateTime</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>OffsetDateTime=java.time.LocalDateTime</importMapping>
+                            </importMappings>
+                            <enablePostProcessFile>true</enablePostProcessFile>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
